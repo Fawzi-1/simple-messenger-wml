@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE wml PUBLIC "-//WAPFORUM//DTD WML 1.1//EN"
+ "http://www.wapforum.org/DTD/wml_1.1.xml">
+
+<wml>
+  <card id="messenger" title="Simple Messenger">
+    <p>Messenger</p>
+
+    <!-- Displaying messages -->
+    <p>
+      <b>Your Message:</b><br/>
+      <input name="yourMessage" title="Type message" />
+    </p>
+
+    <p>
+      <b>Received Message:</b><br/>
+      <input name="receivedMessage" title="Received message" value="Reply will appear here" readonly="true" />
+    </p>
+
+    <!-- Send button -->
+    <do type="accept" label="Send">
+      <go href="#reply">
+        <postfield name="yourMessage" value="$(yourMessage)" />
+      </go>
+    </do>
+
+  </card>
+
+  <!-- Card to simulate a reply message -->
+  <card id="reply" title="Reply">
+    <p>
+      <b>Your Message:</b><br/>
+      <input name="yourMessageReply" title="Your message" value="$(yourMessage)" readonly="true" />
+    </p>
+
+    <p>
+      <b>Received Message:</b><br/>
+      <input name="receivedMessageReply" title="Received message" value="Reply: $(yourMessage)" readonly="true" />
+    </p>
+
+    <!-- Back to the main messenger -->
+    <do type="accept" label="Back">
+      <go href="#messenger"/>
+    </do>
+  </card>
+</wml>
