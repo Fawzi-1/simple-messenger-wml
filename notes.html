@@ -60,6 +60,28 @@
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        .note-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .delete-button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
     </style>
 </head>
 <body>
@@ -79,17 +101,10 @@
         // دالة لحفظ الملاحظة في LocalStorage
         function saveNote() {
             let noteInput = document.getElementById('noteInput').value;
-            if(noteInput) {
-                // جلب الملاحظات المحفوظة سابقاً (أو تهيئة مصفوفة جديدة إذا لم توجد ملاحظات)
+            if (noteInput) {
                 let notes = JSON.parse(localStorage.getItem('notes')) || [];
-                
-                // إضافة الملاحظة الجديدة
                 notes.push(noteInput);
-
-                // تخزين الملاحظات في LocalStorage
                 localStorage.setItem('notes', JSON.stringify(notes));
-
-                // إعادة تعيين حقل الإدخال وعرض الملاحظات
                 document.getElementById('noteInput').value = '';
                 displayNotes();
             } else {
@@ -103,12 +118,34 @@
             let notes = JSON.parse(localStorage.getItem('notes')) || [];
             notesList.innerHTML = '';
 
-            // عرض كل ملاحظة في فقرة منفصلة
-            notes.forEach(note => {
-                let noteItem = document.createElement('p');
-                noteItem.textContent = note;
+            notes.forEach((note, index) => {
+                let noteItem = document.createElement('div');
+                noteItem.className = 'note-item';
+
+                // نص الملاحظة
+                let noteText = document.createElement('span');
+                noteText.textContent = note;
+
+                // زر الحذف
+                let deleteButton = document.createElement('button');
+                deleteButton.textContent = 'حذف';
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = function () {
+                    deleteNote(index);
+                };
+
+                noteItem.appendChild(noteText);
+                noteItem.appendChild(deleteButton);
                 notesList.appendChild(noteItem);
             });
+        }
+
+        // دالة لحذف ملاحظة معينة بناءً على فهرسها
+        function deleteNote(index) {
+            let notes = JSON.parse(localStorage.getItem('notes')) || [];
+            notes.splice(index, 1);  // حذف الملاحظة من المصفوفة
+            localStorage.setItem('notes', JSON.stringify(notes));  // تحديث LocalStorage
+            displayNotes();  // تحديث العرض
         }
 
         // عرض الملاحظات عند تحميل الصفحة
